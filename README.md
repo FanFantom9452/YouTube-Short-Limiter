@@ -2,90 +2,41 @@
 
 連續看 YouTube Shorts 超過設定時間，跳出全屏提醒並自動暫停影片。提醒時間自己調。
 
----
-
-# 先選一種安裝方式
-
-| | **A. Chrome 擴充功能** | **B. 使用者腳本** |
-|---|---|---|
-| 安裝 | 貼一行 PowerShell + 點 2 下 | 點 2 個連結 + 開 1 個開關 |
-| 需要第三方擴充功能 | **不用** | 要裝 Tampermonkey |
-| 自動更新 | **不會**（你自己重跑腳本才更新） | 會自動更新 |
-| 權限 | 只有 `storage` + `www.youtube.com` | 管理器擁有所有網站的完整存取權 |
-| 適合 | **在意安全、想釘死版本** | 已經在用 Tampermonkey、懶得裝 |
-
-不確定就選 **A**。
+Chrome 擴充功能，只要 `storage` 一個權限，只跑在 `www.youtube.com`，零網路請求，所有資料留在本機。
 
 ---
 
-# A. Chrome 擴充功能（推薦）
+# 安裝
 
-開 **PowerShell**（`Win + X` → 「終端機」或「Windows PowerShell」），貼這行：
+## 第 1 步 — 貼上這行指令
 
-```powershell
-irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex
-```
-
-腳本會下載程式到 `%LOCALAPPDATA%\YouTubeShortLimiter`、把路徑複製到剪貼簿，然後開啟 `chrome://extensions`。接著手動做三件事：
-
-1. 右上角打開「**開發人員模式**」
-2. 左上角點「**載入未封裝項目**」
-3. 在資料夾選擇視窗按 **Ctrl + V** 貼上路徑（腳本已經幫你複製好），確定
-
-完成。開任何一支 `youtube.com/shorts/` 影片就開始計時。
-
-> **要更新**：重跑同一行指令，再到 `chrome://extensions` 按那張卡片上的重新載入箭頭。
->
-> **為什麼最後兩下要手動點**：Chrome 不允許任何程式自動安裝擴充功能，這是防堵惡意軟體的刻意設計，繞不過去。
->
-> **不想直接執行網路上的腳本**（合理）：先看過 [`install.ps1`](install.ps1) 再決定，或者直接下載 repo 的 ZIP 自己解壓，然後從第 1 步開始手動做。
-
----
-
-# B. 使用者腳本（3 步，約 1 分鐘）
-
-## 第 1 步 — 裝 Tampermonkey
-
-點這裡 → **[Tampermonkey 安裝頁](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)**
-
-按「**加到 Chrome**」→ 再按「**新增擴充功能**」。
-
-> 已經有 Tampermonkey 就跳過這步。
-
-## 第 2 步 — 開啟權限 ⚠️ 漏掉這步一定失敗
-
-複製下面這行，**貼到 Chrome 網址列按 Enter**：
+開 **命令提示字元** 或 **PowerShell** 都可以（`Win + R` → 打 `cmd` → Enter），貼這行：
 
 ```
-chrome://extensions/?id=dhdgffkkebhmkfjojejmpbldmpobfkfo
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex"
 ```
 
-> 這種網址沒辦法做成可點的連結（Chrome 禁止網頁跳到 `chrome://`），只能自己複製貼上。
+腳本會做三件事：下載程式到 `%LOCALAPPDATA%\YouTubeShortLimiter`、**把安裝路徑複製到你的剪貼簿**、開啟 `chrome://extensions`。
 
-在打開的頁面上做兩件事：
+## 第 2 步 — 在剛跳出來的 Chrome 分頁上點三下
 
-1. 把「**允許使用者指令碼 / Allow user scripts**」打開
-2. 「**網站存取權 / Site access**」選「**在所有網站上 / On all sites**」
-
-> 不需要開「開發人員模式」。Chrome 138 起這個開關已獨立出來，網路上多數教學還停在舊做法。
-
-## 第 3 步 — 安裝腳本
-
-**[點這裡安裝](https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/shorts-limiter.user.js)**
-
-Tampermonkey 會跳出安裝頁 → 按「**安裝**」。
-
-或者開命令提示字元（`Win + R` → 打 `cmd` → Enter），貼這行，效果一樣：
-
-```
-start "" "https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/shorts-limiter.user.js"
-```
+1. 右上角打開「**開發人員模式 / Developer mode**」
+2. 左上角點「**載入未封裝項目 / Load unpacked**」
+3. 在資料夾選擇視窗按 **Ctrl + V** 貼上路徑（已經在剪貼簿裡了），按確定
 
 ## 完成
 
 開任何一支 `youtube.com/shorts/` 影片就開始計時。預設連續看 **4 分鐘**跳提醒。
 
-改設定：點瀏覽器右上角 Tampermonkey 圖示 → **設定提醒時間**。
+改設定：點瀏覽器工具列上的擴充功能圖示。
+
+---
+
+# 更新
+
+重跑第 1 步那行指令，然後到 `chrome://extensions` 按那張卡片上的**重新載入箭頭**。
+
+你的設定與累計時間不會因為更新而消失 —— 安裝路徑是固定的，所以 Chrome 認得這是同一個擴充功能。
 
 ---
 
@@ -115,42 +66,37 @@ start "" "https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/
 
 # 疑難排解
 
-## 看到「無法從這個網站新增應用程式、擴充功能和使用者指令碼」
+## 找不到「載入未封裝項目」按鈕
 
-這是 Chrome **自己**的封鎖頁，不是 Tampermonkey 的。Chrome 原生就認得 `.user.js` 網址，會試著把它當擴充功能安裝，然後被「非 Web Store 一律擋掉」的規則攔下。
+「開發人員模式」沒開。右上角那個開關打開後按鈕才會出現。
 
-Tampermonkey 正常運作時會**搶先**攔截這個網址、換成自己的安裝介面，Chrome 根本沒機會跳這頁。所以看到這頁就代表 **Tampermonkey 沒有攔到** —— 回頭把第 2 步做完，重開 Chrome 再試。
+## 卡片上出現紅色錯誤，或擴充功能突然消失
 
-## 還是不行 → 用 URL 匯入繞過
+`%LOCALAPPDATA%\YouTubeShortLimiter` 這個資料夾被刪掉或搬走了。未封裝的擴充功能是直接從磁碟讀檔的，資料夾不能移動。重跑安裝指令即可。
 
-這條路不經過 `.user.js` 頁面攔截：
+## 指令跑完沒有自動開 Chrome
 
-Tampermonkey 圖示 → **管理面板** → **公用程式** 分頁 → **URL 匯入** → 貼上腳本網址 → **匯入**。
+腳本找不到 `chrome.exe`（非標準路徑安裝）。自己開 `chrome://extensions`，路徑還是在剪貼簿裡。
 
-## 換別的使用者腳本管理器有用嗎
+## 提醒不會跳
 
-沒用。Tampermonkey、Violentmonkey、ScriptCat 在 Chrome 上都走同一個 `chrome.userScripts` API，都需要第 2 步那個開關。
+依序確認：網址是 `youtube.com/shorts/...`、影片正在播（不是暫停）、分頁在前景、視窗有焦點。四個條件缺一就不計時 —— 這是刻意的，讓「看了幾分鐘」貼近真的在看的時間。
 
-想完全避開它只有兩條路：用 **Firefox**（本腳本一字不改即可執行），或改用本 repo 的 **Chrome 擴充功能版**（走 `content_scripts`，不受此限制）。
+## 不想直接執行網路上的腳本
 
-## 為什麼不能一行指令全自動裝完
-
-Chrome 從 137 版起移除了 `--load-extension` 命令列參數，且不允許任何程式自動安裝擴充功能或使用者腳本 —— 這是為了防堵惡意軟體的刻意設計，繞不過去。最後那顆「安裝」按鈕一定得手動點。
+合理。先讀過 [`install.ps1`](install.ps1) 再決定，或直接下載這個 repo 的 ZIP 自己解壓到任一固定資料夾，然後從第 2 步開始手動做。
 
 ---
 
 # 開發
 
-兩個版本，邏輯共用同一份 `tick.js`：
-
 ```
-tick.js                  純函式狀態機（兩個版本共用）
-tick.test.js             node tick.test.js
-shorts-limiter.user.js   使用者腳本版
-manifest.json            Chrome 擴充功能版
-content.js
-popup.html / popup.js
-install.cmd              Windows 引導式安裝
+manifest.json    MV3 宣告，無 background service worker
+tick.js          純函式狀態機
+content.js       每秒 tick、遮罩
+popup.html/js    設定介面
+tick.test.js     node tick.test.js
+install.ps1      Windows 安裝腳本
 ```
 
 無建置流程、無相依套件。
@@ -159,8 +105,4 @@ install.cmd              Windows 引導式安裝
 node tick.test.js
 ```
 
-## 發布使用者腳本
-
-改完程式碼 push 到 `main` 分支即可，Tampermonkey 會自己去 `@updateURL` 拉更新。
-
-但**一定要把 `.user.js` 檔頭的 `@version` 加上去** —— Tampermonkey 靠它判斷要不要更新。只改 `tick.js` 不加版號的話，既有使用者不會收到更新，因為 `@require` 的內容是快取的。
+計時邏輯全部關在 `tick.js` 這個純函式裡（無 DOM、無 chrome API），模式切換、歸零規則、跨天這三段唯一容易寫錯的地方都由 `tick.test.js` 用 assert 釘住。

@@ -1,6 +1,8 @@
 # YouTube Shorts break reminder - Chrome extension installer (Windows)
 #
-#   irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex
+# Runs from either CMD or PowerShell:
+#
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex"
 #
 # Console output is ASCII on purpose: Windows PowerShell 5.1 reads .ps1 files in
 # the system ANSI codepage unless they carry a BOM, so Chinese text here would be
