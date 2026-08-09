@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Shorts 觀看提醒",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "連續觀看 YouTube Shorts 達設定時間後，跳出全屏提醒並暫停影片。",
   "permissions": ["storage"],
   "icons": {

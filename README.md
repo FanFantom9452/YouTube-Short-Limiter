@@ -88,6 +88,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((irm https://raw.gi
 
 重跑安裝指令，然後到 `chrome://extensions` 按那張卡片上的**重新載入箭頭**。
 
+**已經開著的 YouTube 分頁要重整一次**（F5）才會用到新版程式碼。
+
 設定與累計時間不會因為更新而消失 —— 安裝路徑固定，Chrome 認得這是同一個擴充功能。
 
 ---
@@ -109,6 +111,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((irm https://raw.gi
 ## 指令跑完沒有自動開 Chrome
 
 腳本找不到 `chrome.exe`（非標準路徑安裝）。第 1 步的網址還在剪貼簿裡，自己開一個分頁貼上就好。
+
+## 更新後出現「Extension context invalidated」
+
+按下重新載入箭頭時，已經開著的分頁裡的舊 content script **不會跟著結束**。它照常每秒跑迴圈，但它綁定的擴充功能已經沒了，所以每次存取設定都會丟這個例外。
+
+**重整那個分頁（F5）就沒事。** 1.1.1 起腳本偵測到自己變成孤兒會自動停掉計時器並移除倒數，不再洗版，但那個分頁在重整之前仍然不會計時。
 
 ## 提醒不會跳
 

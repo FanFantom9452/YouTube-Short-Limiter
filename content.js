@@ -11,6 +11,26 @@ let settings = { ...DEFAULT_SETTINGS };
 let overlay = null;
 let hud = null;
 let lastWritten = '';
+let timer = null;
+
+// 擴充功能被重新載入或更新後，已開啟分頁裡的 content script 會變成孤兒：它照常
+// 繼續跑，但綁定的擴充功能已經不在，每個 chrome.* 呼叫都會丟
+// 「Extension context invalidated」—— 每秒一次，直到分頁被重整為止。
+// chrome.runtime.id 在失效的那一刻變成 undefined，拿它當存活判斷最省事。
+const alive = () => {
+  try {
+    return !!chrome.runtime?.id;
+  } catch {
+    return false;
+  }
+};
+
+function shutdown() {
+  clearInterval(timer);
+  removeHud();
+  overlay?.remove();
+  overlay = null;
+}
 
 // 'sv' locale 剛好給出本地時區的 YYYY-MM-DD，不用自己補零
 const todayStr = () => new Date().toLocaleDateString('sv');
@@ -31,6 +51,7 @@ function playingVideo() {
 function persist(next) {
   const json = JSON.stringify(next);
   if (json === lastWritten) return; // 不在 Shorts 時狀態不變，省掉每秒寫磁碟
+  if (!alive()) return; // 遮罩按鈕也會走到這裡，所以擋在這一層而不是只擋 loop
   lastWritten = json;
   chrome.storage.local.set({ [STATE_KEY]: next });
 }
@@ -91,6 +112,9 @@ function removeHud() {
 // ── 主迴圈 ─────────────────────────────────────────────────────────────
 
 function loop() {
+  // 擴充功能已被重新載入／更新 → 這份腳本是孤兒，安靜收攤，別每秒丟一次例外
+  if (!alive()) return shutdown();
+
   // 遮罩已顯示：凍結計時，並持續暫停影片 —— 使用者仍可用鍵盤或滾輪在遮罩
   // 後方切到下一支 Shorts，這一行比逐一攔截 keydown / wheel 便宜也更全面。
   if (overlay) {
@@ -189,7 +213,10 @@ chrome.storage.local.get(STATE_KEY).then((local) => {
   return chrome.storage.sync.get(SETTINGS_KEY);
 }).then((sync) => {
   settings = { ...DEFAULT_SETTINGS, ...sync[SETTINGS_KEY] };
-  setInterval(loop, TICK_MS);
+  timer = setInterval(loop, TICK_MS);
+}).catch(() => {
+  // 啟動途中擴充功能就被重新載入了。計時器還沒建立，沒有東西要清，安靜結束 ——
+  // 這是唯一會走到這裡的情況，不是在吞掉真正的錯誤。
 });
 
 // popup 改設定或按「立即歸零」時即時反映，不用重整頁面
