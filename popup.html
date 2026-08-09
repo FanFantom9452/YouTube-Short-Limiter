@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<style>
+  body {
+    width: 250px; margin: 0; padding: 14px;
+    font: 13px/1.5 system-ui, -apple-system, "Noto Sans TC", sans-serif;
+    color: #1a1a1a;
+  }
+  .accum { font-size: 27px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .accum small { display: block; font-size: 11px; font-weight: 400; color: #777; }
+  hr { border: 0; border-top: 1px solid #e5e5e5; margin: 12px 0; }
+  label { display: block; margin-top: 10px; color: #444; }
+  input, select {
+    width: 100%; box-sizing: border-box; margin-top: 3px;
+    padding: 5px 6px; font: inherit; border: 1px solid #ccc; border-radius: 4px;
+  }
+  button {
+    width: 100%; margin-top: 14px; padding: 7px; font: inherit;
+    cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #f6f6f6;
+  }
+  button:hover { background: #ececec; }
+  #saved { height: 15px; font-size: 11px; color: #178a3a; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="accum"><span id="accum">--</span><small>目前累計連續觀看</small></div>
+  <hr>
+
+  <label>提醒門檻（分鐘）
+    <input id="limitMin" type="number" min="1" max="600" step="1">
+  </label>
+
+  <label>歸零方式
+    <select id="mode">
+      <option value="manual">只有按下「我休息」才歸零</option>
+      <option value="auto">停止觀看一段時間後自動歸零</option>
+    </select>
+  </label>
+
+  <label id="autoRow">停止多久算中斷（秒）
+    <input id="autoResetSec" type="number" min="5" max="3600" step="5">
+  </label>
+
+  <label>「再看一下」延後（分鐘）
+    <input id="snoozeMin" type="number" min="1" max="60" step="1">
+  </label>
+
+  <button id="reset">立即歸零</button>
+  <div id="saved"></div>
+
+  <script src="tick.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
