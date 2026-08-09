@@ -11,7 +11,7 @@ Chrome 擴充功能，只要 `storage` 一個權限，只跑在 `www.youtube.com
 開 **命令提示字元** 或 **PowerShell** 都可以（`Win + R` → 打 `cmd` → Enter），貼這行：
 
 ```
-powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1) -replace '^\uFEFF')"
 ```
 
 腳本會**一步一步帶你做完**，每做完一步按 Enter 進下一步：
@@ -126,4 +126,14 @@ node tick.test.js
 
 計時邏輯全部關在 `tick.js` 這個純函式裡（無 DOM、無 chrome API），模式切換、歸零規則、跨天這三段唯一容易寫錯的地方都由 `tick.test.js` 用 assert 釘住。
 
-`install.ps1` 是 UTF-8 **無 BOM**。這是二選一：加 BOM 的話 `irm` 回傳的字串會保留 U+FEFF，`iex` 第一行就變成 `﻿#` 而報錯（PowerShell 把 U+FEFF 當識別字字元，不是空白）；不加 BOM 則換成 Windows PowerShell 5.1 直接執行檔案時用 ANSI 字碼頁解讀，中文變亂碼。主要安裝路徑是一行指令，所以選無 BOM。
+`install.ps1` 是 UTF-8 **無 BOM**。這是二選一：加 BOM 的話 `irm` 回傳的字串會保留 U+FEFF，`iex` 第一行就變成 U+FEFF 接著 `#` 而報錯（PowerShell 把 U+FEFF 當識別字字元，不是空白）；不加 BOM 則換成 Windows PowerShell 5.1 直接執行檔案時用 ANSI 字碼頁解讀，中文變亂碼。主要安裝路徑是一行指令，所以選無 BOM，並且在指令裡多加一道 `-replace` 保險 —— Windows 記事本存 UTF-8 會自動加 BOM，光靠「檔案裡沒有」不夠。
+
+## 圖示
+
+`icons/` 底下四張 PNG 是用 `System.Drawing` 以程式繪製的：一個實心圓加兩個矩形（暫停符號）。沒有使用任何第三方素材、字型或下載的圖片，因此沒有授權問題。要改配色或造型直接重畫即可。
+
+---
+
+# 授權
+
+[MIT](LICENSE)

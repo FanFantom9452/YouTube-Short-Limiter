@@ -2,14 +2,15 @@
 #
 # 從 CMD 或 PowerShell 都可以執行：
 #
-#   powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex"
+#   powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1) -replace '^\uFEFF')"
 #
-# 本檔案是 UTF-8「無 BOM」。加了 BOM 的話，irm 回傳的字串會保留 U+FEFF，iex 拿到
-# 後第一行變成「﻿#」—— PowerShell 把 U+FEFF 當識別字字元而非空白，於是它跟 #
-# 黏成一個不存在的命令名稱，一貼指令就先噴一段紅字。
+# 那個 -replace 是 BOM 防護。本檔案存成 UTF-8「無 BOM」，因為 irm 會把 U+FEFF 原封
+# 不動交給 iex，第一行於是變成「U+FEFF 加上 #」—— PowerShell 把 U+FEFF 當識別字字元而非空白，
+# 它跟 # 黏成一個不存在的命令名稱，使用者一貼指令就先噴一段紅字。但 Windows 記事本
+# 存 UTF-8 時會自動加 BOM，所以光靠「檔案裡沒有」不夠保險，指令自己也要剝一次。
 #
-# 代價是 Windows PowerShell 5.1 直接執行「檔案」時會改用系統 ANSI 字碼頁解讀，
-# 中文變亂碼。要在本機跑這個檔案，改用下面任一種：
+# 無 BOM 的代價是 Windows PowerShell 5.1 直接執行「檔案」時會改用系統 ANSI 字碼頁
+# 解讀，中文變亂碼。要在本機跑這個檔案，改用下面任一種：
 #   powershell -NoProfile -Command "iex (Get-Content -Raw -Encoding UTF8 .\install.ps1)"
 #   pwsh -File .\install.ps1        # PowerShell 7 預設就以 UTF-8 讀取無 BOM 的 .ps1
 
