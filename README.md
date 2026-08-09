@@ -14,11 +14,14 @@
 ### 步驟 0：先決條件（**這步不做後面一定失敗**）
 
 1. 裝 [Tampermonkey](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-2. 開 `chrome://extensions`，右上角打開**開發人員模式**
-3. 點 Tampermonkey 的**詳細資料**，打開**「允許使用者指令碼 / Allow user scripts」**
-4. 同一頁把**網站存取權**設成**「在所有網站上」**
+2. 開 `chrome://extensions` → Tampermonkey 的**詳細資料** → 打開**「允許使用者指令碼 / Allow user scripts」**
+3. 同一頁把**網站存取權**設成**「在所有網站上」**
 
-第 3 步是 Chrome 138 起新增的獨立權限開關，跟開發人員模式是兩回事，最常被漏掉。沒開的話 Chrome 不允許任何擴充功能執行使用者腳本。
+第 2 步是 Chrome 138 起新增的獨立權限開關，**不需要開發人員模式** —— 網路上多數教學還停在 138 之前的舊做法。
+
+換別的管理器不會繞過它：Tampermonkey、Violentmonkey、ScriptCat 在 Chrome 上都走同一個 `chrome.userScripts` API。
+
+想完全避開這個開關的話，只有兩條路：用 **Firefox**（本腳本一字不改即可執行），或改用本 repo 的 **Chrome 擴充功能版**（走 `content_scripts`，不受此限制）。
 
 ### 方式一：一行指令
 

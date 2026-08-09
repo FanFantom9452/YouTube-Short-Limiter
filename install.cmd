@@ -18,11 +18,11 @@ pause >nul
 echo.
 echo   [2/3] REQUIRED - Chrome will block the install without this.
 echo         Type chrome://extensions in the address bar, then:
-echo           a. Turn on "Developer mode"        (top right)
-echo           b. Tampermonkey - Details - turn on "Allow user scripts"
-echo           c. Site access: set to "On all sites"
+echo           a. Tampermonkey - Details - turn on "Allow user scripts"
+echo           b. Site access: set to "On all sites"
+echo         Developer mode is NOT needed on Chrome 138 and newer.
 echo.
-echo   Press any key once all three are done...
+echo   Press any key once both are done...
 pause >nul
 
 echo.
