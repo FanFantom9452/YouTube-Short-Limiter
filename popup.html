@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <style>
   body {
-    width: 250px; margin: 0; padding: 14px;
+    width: 262px; margin: 0; padding: 14px;
     font: 13px/1.5 system-ui, -apple-system, "Noto Sans TC", sans-serif;
     color: #1a1a1a;
   }
@@ -12,10 +12,13 @@
   .accum small { display: block; font-size: 11px; font-weight: 400; color: #777; }
   hr { border: 0; border-top: 1px solid #e5e5e5; margin: 12px 0; }
   label { display: block; margin-top: 10px; color: #444; }
+  .check { display: flex; align-items: center; gap: 7px; margin-top: 14px; }
+  .check input { width: auto; margin: 0; }
   input, select {
     width: 100%; box-sizing: border-box; margin-top: 3px;
     padding: 5px 6px; font: inherit; border: 1px solid #ccc; border-radius: 4px;
   }
+  .hint { font-size: 11px; color: #888; margin-top: 3px; }
   button {
     width: 100%; margin-top: 14px; padding: 7px; font: inherit;
     cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #f6f6f6;
@@ -32,20 +35,26 @@
     <input id="limitMin" type="number" min="1" max="600" step="1">
   </label>
 
-  <label>歸零方式
+  <label>累計歸零方式
     <select id="mode">
-      <option value="manual">只有按下「我休息」才歸零</option>
-      <option value="auto">停止觀看一段時間後自動歸零</option>
+      <option value="manual">按「我休息」後真的離開才歸零</option>
+      <option value="auto">只要停止觀看夠久就歸零</option>
     </select>
   </label>
 
-  <label id="autoRow">停止多久算中斷（秒）
-    <input id="autoResetSec" type="number" min="5" max="3600" step="5">
+  <label>停止觀看多久算休息（分鐘）
+    <input id="resetAfterMin" type="number" min="1" max="180" step="1">
+    <span class="hint">暫停、切分頁、關瀏覽器都算停止觀看</span>
   </label>
 
   <label>「再看一下」延後（分鐘）
     <input id="snoozeMin" type="number" min="1" max="60" step="1">
   </label>
+
+  <div class="check">
+    <input id="showHud" type="checkbox">
+    <label for="showHud" style="margin:0">在 Shorts 右上角顯示倒數</label>
+  </div>
 
   <button id="reset">立即歸零</button>
   <div id="saved"></div>
