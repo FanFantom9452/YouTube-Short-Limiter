@@ -1,12 +1,17 @@
-﻿# YouTube Shorts 觀看提醒 — Chrome 擴充功能安裝腳本（Windows）
+# YouTube Shorts 觀看提醒 — Chrome 擴充功能安裝腳本（Windows）
 #
 # 從 CMD 或 PowerShell 都可以執行：
 #
 #   powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex"
 #
-# 本檔案存成「UTF-8 with BOM」。Windows PowerShell 5.1 在沒有 BOM 時會用系統
-# ANSI 字碼頁讀取 .ps1，中文會變亂碼；加了 BOM 之後，直接執行檔案與透過
-# irm | iex 兩種方式都能正確顯示。
+# 本檔案是 UTF-8「無 BOM」。加了 BOM 的話，irm 回傳的字串會保留 U+FEFF，iex 拿到
+# 後第一行變成「﻿#」—— PowerShell 把 U+FEFF 當識別字字元而非空白，於是它跟 #
+# 黏成一個不存在的命令名稱，一貼指令就先噴一段紅字。
+#
+# 代價是 Windows PowerShell 5.1 直接執行「檔案」時會改用系統 ANSI 字碼頁解讀，
+# 中文變亂碼。要在本機跑這個檔案，改用下面任一種：
+#   powershell -NoProfile -Command "iex (Get-Content -Raw -Encoding UTF8 .\install.ps1)"
+#   pwsh -File .\install.ps1        # PowerShell 7 預設就以 UTF-8 讀取無 BOM 的 .ps1
 
 $ErrorActionPreference = 'Stop'
 # PS 5.1 預設仍在協商 TLS 1.0/1.1，GitHub 只接受 1.2 以上。

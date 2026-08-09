@@ -94,7 +94,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 
 ## 不想直接執行網路上的腳本
 
-合理。先讀過 [`install.ps1`](install.ps1) 再決定，或直接下載這個 repo 的 ZIP 自己解壓到任一固定資料夾，然後從第 2 步開始手動做。
+合理。先讀過 [`install.ps1`](install.ps1) 再決定，或直接下載這個 repo 的 ZIP 自己解壓到任一固定資料夾，然後手動走「開發人員模式 → 載入未封裝項目」。
+
+讀完想在本機跑那個檔案的話，**不要**用 `powershell -File .\install.ps1` —— Windows PowerShell 5.1 會用系統 ANSI 字碼頁讀取無 BOM 的 `.ps1`，中文會變亂碼。改用：
+
+```
+powershell -NoProfile -Command "iex (Get-Content -Raw -Encoding UTF8 .\install.ps1)"
+```
+
+或用 PowerShell 7（`pwsh -File .\install.ps1`），它預設就以 UTF-8 讀取。
 
 ---
 
@@ -118,4 +126,4 @@ node tick.test.js
 
 計時邏輯全部關在 `tick.js` 這個純函式裡（無 DOM、無 chrome API），模式切換、歸零規則、跨天這三段唯一容易寫錯的地方都由 `tick.test.js` 用 assert 釘住。
 
-`install.ps1` 存成 UTF-8 **with BOM**：Windows PowerShell 5.1 在沒有 BOM 時會用系統 ANSI 字碼頁讀取 `.ps1`，中文會變亂碼。
+`install.ps1` 是 UTF-8 **無 BOM**。這是二選一：加 BOM 的話 `irm` 回傳的字串會保留 U+FEFF，`iex` 第一行就變成 `﻿#` 而報錯（PowerShell 把 U+FEFF 當識別字字元，不是空白）；不加 BOM 則換成 Windows PowerShell 5.1 直接執行檔案時用 ANSI 字碼頁解讀，中文變亂碼。主要安裝路徑是一行指令，所以選無 BOM。
