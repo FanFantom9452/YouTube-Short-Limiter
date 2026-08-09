@@ -4,7 +4,45 @@
 
 ---
 
-# 安裝（3 步，約 1 分鐘）
+# 先選一種安裝方式
+
+| | **A. Chrome 擴充功能** | **B. 使用者腳本** |
+|---|---|---|
+| 安裝 | 貼一行 PowerShell + 點 2 下 | 點 2 個連結 + 開 1 個開關 |
+| 需要第三方擴充功能 | **不用** | 要裝 Tampermonkey |
+| 自動更新 | **不會**（你自己重跑腳本才更新） | 會自動更新 |
+| 權限 | 只有 `storage` + `www.youtube.com` | 管理器擁有所有網站的完整存取權 |
+| 適合 | **在意安全、想釘死版本** | 已經在用 Tampermonkey、懶得裝 |
+
+不確定就選 **A**。
+
+---
+
+# A. Chrome 擴充功能（推薦）
+
+開 **PowerShell**（`Win + X` → 「終端機」或「Windows PowerShell」），貼這行：
+
+```powershell
+irm https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/install.ps1 | iex
+```
+
+腳本會下載程式到 `%LOCALAPPDATA%\YouTubeShortLimiter`、把路徑複製到剪貼簿，然後開啟 `chrome://extensions`。接著手動做三件事：
+
+1. 右上角打開「**開發人員模式**」
+2. 左上角點「**載入未封裝項目**」
+3. 在資料夾選擇視窗按 **Ctrl + V** 貼上路徑（腳本已經幫你複製好），確定
+
+完成。開任何一支 `youtube.com/shorts/` 影片就開始計時。
+
+> **要更新**：重跑同一行指令，再到 `chrome://extensions` 按那張卡片上的重新載入箭頭。
+>
+> **為什麼最後兩下要手動點**：Chrome 不允許任何程式自動安裝擴充功能，這是防堵惡意軟體的刻意設計，繞不過去。
+>
+> **不想直接執行網路上的腳本**（合理）：先看過 [`install.ps1`](install.ps1) 再決定，或者直接下載 repo 的 ZIP 自己解壓，然後從第 1 步開始手動做。
+
+---
+
+# B. 使用者腳本（3 步，約 1 分鐘）
 
 ## 第 1 步 — 裝 Tampermonkey
 
