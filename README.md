@@ -11,9 +11,18 @@
 
 ## 安裝（使用者腳本）
 
+### 步驟 0：先決條件（**這步不做後面一定失敗**）
+
+1. 裝 [Tampermonkey](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+2. 開 `chrome://extensions`，右上角打開**開發人員模式**
+3. 點 Tampermonkey 的**詳細資料**，打開**「允許使用者指令碼 / Allow user scripts」**
+4. 同一頁把**網站存取權**設成**「在所有網站上」**
+
+第 3 步是 Chrome 138 起新增的獨立權限開關，跟開發人員模式是兩回事，最常被漏掉。沒開的話 Chrome 不允許任何擴充功能執行使用者腳本。
+
 ### 方式一：一行指令
 
-已經有 Tampermonkey 的話，開 CMD 貼這行：
+開 CMD 貼這行：
 
 ```
 start "" "https://raw.githubusercontent.com/FanFantom9452/YouTube-Short-Limiter/main/shorts-limiter.user.js"
@@ -30,6 +39,20 @@ Tampermonkey 會攔截這個網址並跳出安裝頁，按「安裝」即可。
 ### 使用
 
 裝好後開任一支 `youtube.com/shorts/` 影片即可開始計時。改設定：點 Tampermonkey 圖示 → **設定提醒時間**。
+
+### 疑難排解
+
+**看到「無法從這個網站新增應用程式、擴充功能和使用者指令碼」**
+
+這是 Chrome **自己**的封鎖頁，不是 Tampermonkey 的。Chrome 原生就認得 `.user.js` 網址，會試著把它當擴充功能安裝然後擋下來。
+
+Tampermonkey 正常運作時會搶先攔截這個網址、換成自己的安裝介面，Chrome 根本沒機會跳這頁。所以看到這頁就代表 **Tampermonkey 沒有攔到** —— 回頭做完上面的步驟 0，然後重開 Chrome 再試。
+
+**還是不行 → 用 URL 匯入繞過**
+
+這條路不經過 `.user.js` 頁面攔截：
+
+Tampermonkey 圖示 → **管理面板** → **公用程式** 分頁 → **URL 匯入** → 貼上腳本網址 → **匯入**。
 
 ---
 
